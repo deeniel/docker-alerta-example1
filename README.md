@@ -1,0 +1,1 @@
+# docker-alerta-example1
