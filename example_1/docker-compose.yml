@@ -6,7 +6,7 @@ services:
     volumes:
       - $PWD/config/config.json:/web/config.json
     ports:
-      - 8080:80
+      - 8000:80
     depends_on:
       - db
       - alerta
@@ -23,7 +23,7 @@ services:
       context: ./alerta
       dockerfile: Dockerfile
     ports:
-      - "5000:8080"
+      - "8080:8080"
     depends_on:
       - db
     environment:
