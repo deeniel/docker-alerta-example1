@@ -1,22 +1,31 @@
 version: "3.1"
 services:
   alerta-web:
-    build: 
-      context: ./alerta-webui
-      dockerfile: Dockerfile
+    image: alerta/alerta-web
+    container_name: alerta-web
+    volumes:
+      - $PWD/config/config.json:/web/config.json
     ports:
       - 8080:80
     depends_on:
       - db
       - alerta
+    environment:
+      - DEBUG=1  # remove this line to turn DEBUG off
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/monitoring
+      - AUTH_REQUIRED=True
+      - ADMIN_USERS=admin@alerta.io,devops@alerta.io
+      - ADMIN_PASSWORD=super-secret # default is "alerta"
+      - ADMIN_KEY=demo-key  # assigned to first user in ADMIN_USERS
+      - ADMIN_KEY_MAXAGE=500
   alerta:
     build: 
       context: ./alerta
-      dockerfile: alerta.Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "5000:8080"
     depends_on:
-          - db
+      - db
     environment:
   # - DEBUG=1  # remove this line to turn DEBUG off
         - DATABASE_URL=postgres://postgres:postgres@db:5432/monitoring
